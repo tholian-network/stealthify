@@ -1,6 +1,5 @@
 
 import { console, Buffer, Emitter, isFunction, isObject, isString } from '../extern/base.mjs';
-import { ENVIRONMENT                                              } from './ENVIRONMENT.mjs';
 import { Mode                                                     } from './client/Mode.mjs';
 import { Settings                                                 } from './client/Settings.mjs';
 import { URL                                                      } from './parser/URL.mjs';
@@ -78,9 +77,9 @@ const Client = function(settings, stealthify) {
 	stealthify = isStealthify(stealthify) ? stealthify : null;
 
 
-	this._settings = Object.freeze(Object.assign({
+	this.settings = Object.assign({
 		host: null
-	}, settings));
+	}, settings);
 
 
 	this.address    = null;
@@ -117,7 +116,7 @@ Client.prototype = Object.assign({}, Emitter.prototype, {
 			browser:  null,
 			events:   blob.data.events,
 			journal:  blob.data.journal,
-			settings: Object.assign({}, this._settings),
+			settings: Object.assign({}, this.settings),
 			services: {},
 			state:    {
 				connected:  false,
@@ -156,46 +155,8 @@ Client.prototype = Object.assign({}, Emitter.prototype, {
 
 		if (this.__state.connected === false) {
 
-			let host  = isString(this._settings.host) ? this._settings.host : ENVIRONMENT.hostname;
-			let url   = URL.parse('ws://' + host + ':65432');
-			let hosts = url.hosts.sort((a, b) => {
-
-				if (a.scope === 'private' && b.scope === 'private') {
-
-					if (a.type === 'v4' && b.type === 'v4') return 0;
-					if (a.type === 'v4') return -1;
-					if (b.type === 'v4') return  1;
-
-				}
-
-				if (a.scope === 'private') return -1;
-				if (b.scope === 'private') return  1;
-
-				if (a.type === 'v4' && b.type === 'v4') return 0;
-				if (a.type === 'v4') return -1;
-				if (b.type === 'v4') return  1;
-
-				return 0;
-
-			});
-
-
-			if (host !== ENVIRONMENT.hostname) {
-
-				let check = hosts.find((ip) => ip.scope === 'private') || null;
-				if (check === null) {
-
-					if (ENVIRONMENT.secure === true) {
-						url = URL.parse('wss://' + ENVIRONMENT.hostname + ':65432');
-					} else {
-						url = URL.parse('ws://' + ENVIRONMENT.hostname + ':65432');
-					}
-
-				}
-
-			}
-
-
+			let host   = isString(this.settings.host) ? this.settings.host : 'localhost';
+			let url    = URL.parse('ws://' + host + ':65432');
 			let server = null;
 
 			if (url.domain !== null) {
@@ -225,7 +186,7 @@ Client.prototype = Object.assign({}, Emitter.prototype, {
 
 			if (socket !== null) {
 
-				socket[Symbol.for('local')]  = ENVIRONMENT.hostname;
+				socket[Symbol.for('local')]  = host;
 				socket[Symbol.for('remote')] = server;
 
 				socket.onmessage = (e) => {

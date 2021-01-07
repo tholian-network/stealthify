@@ -1,5 +1,6 @@
 
 import { isArray, isBoolean, isFunction, isObject, isString } from '../extern/base.mjs';
+import { isStealthify                                       } from '../source/Stealthify.mjs';
 
 
 
@@ -9,14 +10,16 @@ export const isStorage = function(obj) {
 
 
 
-const Storage = function(settings, chrome) {
+const Storage = function(settings, stealthify, chrome) {
 
-	settings = isObject(settings)   ? settings : {};
-	chrome   = chrome !== undefined ? chrome   : null;
+	settings   = isObject(settings)       ? settings   : {};
+	stealthify = isStealthify(stealthify) ? stealthify : null;
+	chrome     = chrome !== undefined     ? chrome     : null;
 
 
-	this.chrome   = chrome;
-	this.settings = settings;
+	this.chrome     = chrome;
+	this.settings   = settings;
+	this.stealthify = stealthify;
 
 };
 
@@ -74,7 +77,13 @@ Storage.prototype = {
 					}
 
 					if (isString(data.host) === true) {
+
 						this.settings.host = data.host;
+
+						if (this.stealthify !== null) {
+							this.stealthify.client.settings.host = this.settings.host;
+						}
+
 					}
 
 					if (isArray(data.modes) === true) {

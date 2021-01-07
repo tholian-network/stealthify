@@ -7,3 +7,6 @@
 /design/Element.mjs
 /design/Widget.mjs
 
+# shared with /stealth
+/source/parser
+

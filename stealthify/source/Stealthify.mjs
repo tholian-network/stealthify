@@ -126,13 +126,14 @@ const Stealthify = function(settings, chrome) {
 	this.settings = Object.assign({
 		debug:  false,
 		host:   'localhost',
+		theme:  'dark',
 		modes:  [],
 		powers: []
 	}, settings);
 
 	this.client      = new Client({ host: this.settings.host }, this);
-	this.interceptor = new Interceptor(this.settings, chrome);
-	this.storage     = new Storage(this.settings, chrome);
+	this.interceptor = new Interceptor(this.settings, this, chrome);
+	this.storage     = new Storage(this.settings, this, chrome);
 	this.tab         = null;
 	this.tabs        = [];
 
@@ -161,19 +162,30 @@ const Stealthify = function(settings, chrome) {
 
 	this.on('connect', () => {
 
-		this.storage.read(() => {
+		chrome.browserAction.setBadgeText({ text: ' ' });
+		chrome.browserAction.setBadgeBackgroundColor({ color: '#33ff33' });
+		chrome.browserAction.setTitle({ title: 'Stealthify: connected' });
 
-			this.client.services.settings.read({
-				modes: true
-			}, () => {
+		this.client.services.settings.read({
+			modes: true
+		}, () => {
 
-				if (this.settings.debug === true) {
-					console.info('Stealthify: Settings loaded from "' + this.settings.host + '".');
-				}
-
-			});
+			if (this.settings.debug === true) {
+				console.info('Stealthify: Settings loaded from "' + this.settings.host + '".');
+			}
 
 		});
+
+		this.interceptor.connect();
+
+	});
+
+	this.on('disconnect', () => {
+
+		chrome.browserAction.setBadgeText({ text: '' });
+		chrome.browserAction.setTitle({ title: 'Stealthify: disconnected' });
+
+		this.reconnect();
 
 	});
 
@@ -360,7 +372,7 @@ Stealthify.prototype = Object.assign({}, Emitter.prototype, {
 
 				}
 
-			}, reconnect * 30000);
+			}, reconnect * 1000 + 1000);
 
 			return true;
 
@@ -467,12 +479,16 @@ Stealthify.prototype = Object.assign({}, Emitter.prototype, {
 
 		// TODO: Implement getPower()
 
+		return null;
+
 	},
 
 	setPower: function(power) {
 
 		// TODO: Implement setPower()
 		// TODO: this.storage.save()
+
+		return false;
 
 	}
 

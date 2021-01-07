@@ -270,7 +270,11 @@ export const clean = (target) => {
 				remove(target + '/extern/base.mjs'),
 				remove(target + '/design/common'),
 				remove(target + '/design/Element.mjs'),
-				remove(target + '/design/Widget.mjs')
+				remove(target + '/design/Widget.mjs'),
+				remove(target + '/source/parser/DATETIME.mjs'),
+				remove(target + '/source/parser/IP.mjs'),
+				remove(target + '/source/parser/UA.mjs'),
+				remove(target + '/source/parser/URL.mjs')
 			].forEach((result) => results.push(result));
 
 		} else {
@@ -318,10 +322,14 @@ export const build = (target) => {
 			console.log('stealthify: build()');
 
 			[
-				copy(STEALTH + '/base/build/browser.mjs',     target + '/extern/base.mjs'),
-				copy(STEALTH + '/browser/design/common',      target + '/design/common'),
-				copy(STEALTH + '/browser/design/Element.mjs', target + '/design/Element.mjs'),
-				copy(STEALTH + '/browser/design/Widget.mjs',  target + '/design/Widget.mjs')
+				copy(STEALTH + '/base/build/browser.mjs',             target + '/extern/base.mjs'),
+				copy(STEALTH + '/browser/design/common',              target + '/design/common'),
+				copy(STEALTH + '/browser/design/Element.mjs',         target + '/design/Element.mjs'),
+				copy(STEALTH + '/browser/design/Widget.mjs',          target + '/design/Widget.mjs'),
+				copy(STEALTH + '/stealth/source/parser/DATETIME.mjs', target + '/source/parser/DATETIME.mjs'),
+				copy(STEALTH + '/stealth/source/parser/IP.mjs',       target + '/source/parser/IP.mjs'),
+				copy(STEALTH + '/stealth/source/parser/UA.mjs',       target + '/source/parser/UA.mjs'),
+				copy(STEALTH + '/stealth/source/parser/URL.mjs',      target + '/source/parser/URL.mjs')
 			].forEach((result) => results.push(result));
 
 		} else {
@@ -329,14 +337,16 @@ export const build = (target) => {
 			console.log('stealthify: build("' + target + '")');
 
 			[
-				copy(STEALTH + '/base/build/browser.mjs',     target + '/extern/base.mjs'),
-				copy(ROOT    + '/stealthify/chrome',          target + '/chrome'),
-				copy(ROOT    + '/stealthify/design',          target + '/design'),
-				copy(ROOT    + '/stealthify/source',          target + '/source'),
-				copy(STEALTH + '/browser/design/common',      target + '/design/common'),
-				copy(STEALTH + '/browser/design/Element.mjs', target + '/design/Element.mjs'),
-				copy(STEALTH + '/browser/design/Widget.mjs',  target + '/design/Widget.mjs'),
-				copy(ROOT    + '/manifest.json',              target + '/manifest.json')
+				copy(STEALTH + '/base/build/browser.mjs',        target + '/extern/base.mjs'),
+				copy(ROOT    + '/stealthify/chrome',             target + '/chrome'),
+				copy(ROOT    + '/stealthify/design',             target + '/design'),
+				copy(STEALTH + '/browser/design/common',         target + '/design/common'),
+				copy(STEALTH + '/browser/design/Element.mjs',    target + '/design/Element.mjs'),
+				copy(STEALTH + '/browser/design/Widget.mjs',     target + '/design/Widget.mjs'),
+				copy(ROOT    + '/stealthify/source',             target + '/source'),
+				copy(STEALTH + '/stealth/source/parser/IP.mjs',  target + '/source/parser/IP.mjs'),
+				copy(STEALTH + '/stealth/source/parser/URL.mjs', target + '/source/parser/URL.mjs'),
+				copy(ROOT    + '/manifest.json',                 target + '/manifest.json')
 			].forEach((result) => results.push(result));
 
 		}

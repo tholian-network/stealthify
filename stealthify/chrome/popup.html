@@ -18,13 +18,16 @@
 				border: 1px solid transparent;
 			}
 
-			footer {
+			body > footer {
 				text-align: right;
 			}
 
+			footer > button[data-action="incognito"]:before { content: '\e89e'; }
+			footer > button[data-action="options"]:before   { content: '\e8b8'; }
+
 		</style>
 	</head>
-	<body>
+	<body data-page="popup">
 		<main>
 			<section data-key="modes">
 				TODO: Toggle Cards for domain and subdomains

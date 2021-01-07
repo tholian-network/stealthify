@@ -1,0 +1,175 @@
+
+stealthify-card-settings {
+	all: unset;
+	display: block;
+	position: relative;
+	width: 800px;
+	max-height: 64px;
+	margin: 0px;
+	padding: 16px;
+	background: var(--surface-default-background);
+	border: 1px solid var(--surface-default-color);
+	border-radius: 8px;
+	box-sizing: border-box;
+	transition: 200ms all ease-out;
+	overflow: hidden;
+	cursor: default;
+}
+
+stealthify-card-settings.active {
+	max-height: unset;
+}
+
+stealthify-card-settings > h3 {
+	display: block;
+	margin: 0px;
+	padding: 0px 0px 16px 0px;
+	font-family: 'crystalline';
+	font-size: 32px;
+	font-weight: 500;
+	line-height: 32px;
+	text-transform: uppercase;
+	vertical-align: middle;
+}
+
+stealthify-card-settings > button[data-action="toggle"] {
+	display: block;
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	bottom: auto;
+	left: auto;
+}
+
+stealthify-card-settings > button[data-action="toggle"]:before {
+	content: '\e5c5';
+	transition: 200ms transform ease-out;
+}
+
+stealthify-card-settings > button[data-action="toggle"].active:before {
+	transform: rotate(180deg);
+	transition: 200ms transform ease-out;
+}
+
+
+
+stealthify-card-settings-article {
+	display: none;
+	width: 100%;
+	height: auto;
+}
+
+stealthify-card-settings.active stealthify-card-settings-article {
+	display: block;
+}
+
+stealthify-card-settings-article > h4 {
+	display: block;
+	margin: 32px 0px 16px 0px;
+	padding: 0px 0px 0px 0px;
+	font-family: 'crystalline';
+	font-size: 24px;
+	font-weight: 500;
+	line-height: 24px;
+	text-transform: uppercase;
+	vertical-align: middle;
+	border-bottom: 1px solid var(--surface-default-color);
+}
+
+stealthify-card-settings-article > h4:nth-of-type(1) {
+	margin-top: 16px;
+}
+
+stealthify-card-settings-article > input[type="text"][name="host"] {
+	display: block;
+	width: 256px;
+	margin: 0px auto;
+	text-align: center;
+}
+
+stealthify-card-settings-article > input[type="text"][name="host"].invalid,
+stealthify-card-settings-article > input[type="text"][name="host"].invalid:focus,
+stealthify-card-settings-article > input[type="text"][name="host"].invalid:hover {
+	color: var(--element-invalid-color);
+	border: 1px solid var(--element-invalid-color);
+	background: var(--element-invalid-background);
+}
+
+stealthify-card-settings-article > p {
+	margin: 0px 0px 16px 0px;
+	font-family: 'museo';
+	font-size: 16px;
+	text-align: justify;
+}
+
+stealthify-card-settings-article > ul {
+	display: block;
+	margin: 0px 0px 16px 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+stealthify-card-settings-article > ul li {
+	display: block;
+	width: 256px;
+	margin: 0px auto;
+	padding: 0px;
+	line-height: 32px;
+	vertical-align: middle;
+}
+
+stealthify-card-settings-article > ul li label {
+	margin: 0px 0px 0px 8px;
+	padding: 0px;
+	color: var(--element-default-color);
+	font-family: 'museo';
+	font-size: 16px;
+	line-height: 32px;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+stealthify-card-settings-article > ul li label a {
+	vertical-align: top;
+}
+
+stealthify-card-settings-article > ul li input[type="radio"][name="theme"][value="dark"]:before  { content: '\e1ad'; }
+stealthify-card-settings-article > ul li input[type="radio"][name="theme"][value="light"]:before { content: '\e1ac'; }
+stealthify-card-settings-article > ul li input[type="radio"][name="debug"][value="false"]:before { content: '\e612'; }
+stealthify-card-settings-article > ul li input[type="radio"][name="debug"][value="true"]:before  { content: '\e868'; }
+
+stealthify-card-settings-article > ul li input[type="radio"]:focus + label,
+stealthify-card-settings-article > ul li input[type="radio"]:hover + label {
+	color: var(--element-focus-color);
+}
+
+stealthify-card-settings-article > ul li input[type="radio"]:checked + label {
+	color: var(--element-active-color);
+}
+
+
+
+stealthify-card-settings-footer {
+	display: none;
+	height: 32px;
+	margin: 16px 0px 0px 0px;
+	padding: 0px;
+	text-align: right;
+}
+
+stealthify-card-settings.active stealthify-card-settings-footer {
+	display: block;
+}
+
+stealthify-card-settings-footer > button[data-action="save"]:before { content: '\e876'; }
+
+
+
+@media screen and (max-width: 800px) {
+
+	stealthify-card-settings {
+		width: auto;
+	}
+
+}
+

@@ -10,7 +10,8 @@
 		"sourceType": "module"
 	},
 	"globals": {
-		"Buffer": true
+		"Buffer": true,
+		"chrome": true
 	},
 	"overrides": [{
 		"files": [ "extern/base.mjs" ],
