@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<meta charset="utf-8">
+	<head>
+		<title>Stealthify - Site Modes</title>
+		<style>
+
+			@import url("../design/common/index.css");
+			@import url("../design/common/theme.css");
+			@import url("../design/common/elements.css");
+			@import url("../design/common/layout.css");
+
+			@import url("../design/card/Toggle.css");
+
+
+
+			main > section {
+				border: 1px solid transparent;
+			}
+
+			footer {
+				text-align: right;
+			}
+
+		</style>
+	</head>
+	<body>
+		<main>
+			<section data-key="modes">
+				TODO: Toggle Cards for domain and subdomains
+			</section>
+			<section data-key="toggles-cdn">
+				TODO: Toggle Cards for included CDNs
+			</section>
+			<section data-key="toggles-service">
+				TODO: Toggle Cards for included third-party SDKs/Services
+			</section>
+		</main>
+		<footer>
+			<button data-action="options" title="Open Stealthify Options"></button>
+			<button data-action="incognito" title="Open Website in Incognito Window"></button>
+		</footer>
+		<script type="module" src="popup.mjs"></script>
+	</body>
+</html>

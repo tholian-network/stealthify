@@ -1,0 +1,9 @@
+
+# shared with /base
+/extern/base.mjs
+
+# shared with /browser
+/design/common
+/design/Element.mjs
+/design/Widget.mjs
+
