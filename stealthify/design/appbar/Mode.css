@@ -1,0 +1,88 @@
+
+stealthify-appbar-mode {
+	display: inline-block;
+	position: relative;
+	width: auto;
+	height: 32px;
+	margin: 0px;
+	padding: 0px;
+	line-height: 32px;
+	text-align: center;
+	vertical-align: top;
+	white-space: nowrap;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+stealthify-appbar-mode button {
+	display: inline-block;
+	min-width: 32px;
+	margin: 0px;
+	padding: 0px;
+	line-height: 32px;
+	height: 32px;
+	color: var(--element-default-color);
+	font-size: 24px;
+	text-align: center;
+	background: var(--element-default-background);
+	border: 1px solid transparent;
+	border-radius: 4px;
+	box-sizing: border-box;
+	transition: 200ms all ease-out;
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	outline: none;
+	cursor: pointer;
+}
+
+stealthify-appbar-mode button:before {
+	display: inline-block;
+	width: 100%;
+	font-family: 'icon';
+	text-align: center;
+	speak: none;
+	-webkit-font-smoothing: antialiased;
+}
+
+stealthify-appbar-mode button[disabled],
+stealthify-appbar-mode button[disabled]:hover {
+	color: var(--element-disable-color);
+	border: 1px solid transparent;
+	background: var(--element-disable-background);
+	cursor: not-allowed;
+}
+
+stealthify-appbar-mode button:focus,
+stealthify-appbar-mode button:hover {
+	color: var(--element-focus-color);
+	border: 1px solid var(--element-focus-color);
+	background: var(--element-focus-background);
+	outline: none;
+}
+
+stealthify-appbar-mode button::-moz-focus-inner {
+	border: 0px solid transparent;
+}
+
+stealthify-appbar-mode span[data-key="domain"] {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px 8px;
+	line-height: 32px;
+	color: var(--layout-default-color);
+	font-family: 'vera-mono';
+	font-size: 16px;
+	font-weight: 400;
+	text-align: left;
+	vertical-align: bottom;
+}
+
+stealthify-appbar-mode button[data-key="mode.text"]:before  { content: '\e06f'; }
+stealthify-appbar-mode button[data-key="mode.image"]:before { content: '\e432'; }
+stealthify-appbar-mode button[data-key="mode.audio"]:before { content: '\e049'; }
+stealthify-appbar-mode button[data-key="mode.video"]:before { content: '\e404'; }
+stealthify-appbar-mode button[data-key="mode.other"]:before { content: '\e048'; }
+stealthify-appbar-mode button[data-val="true"]              { color: var(--element-active-color); }
+stealthify-appbar-mode button[data-val="true"]:hover        { color: var(--element-active-color); }
+

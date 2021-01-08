@@ -17,5 +17,11 @@ setTimeout(() => {
 
 }, 0);
 
+window.APPBAR = {
+	'1st-party': null,
+	'2nd-party': null,
+	'3rd-party': null
+};
+
 window.STEALTHIFY = stealthify;
 

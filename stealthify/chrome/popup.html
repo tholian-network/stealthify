@@ -10,39 +10,59 @@
 			@import url("../design/common/elements.css");
 			@import url("../design/common/layout.css");
 
-			@import url("../design/card/Toggle.css");
+			@import url("../design/appbar/Mode.css");
 
 
 
-			main > section {
-				border: 1px solid transparent;
+			stealthify-appbar {
+				display: block;
+				width: auto;
+				height: auto;
+				line-height: 32px;
+				margin: 0px;
+				padding: 0px;
+				border: 0px solid transparent;
+				border-bottom: 1px solid var(--surface-default-color);
+				background: var(--surface-default-background);
+				box-sizing: border-box;
+				vertical-align: middle;
 			}
 
-			body > footer {
+			stealthify-appbar > section {
+				border: 0px solid transparent;
+				border-bottom: 1px solid var(--surface-default-color);
+			}
+
+			stealthify-appbar > section:empty,
+			stealthify-appbar > section:last-of-type {
+				border: none;
+			}
+
+			stealthify-footer {
+				display: block;
+				margin: 0px;
+				padding: 0px;
+				font-family: 'museo';
+				font-size: 16px;
 				text-align: right;
+				box-sizing: border-box;
 			}
 
-			footer > button[data-action="incognito"]:before { content: '\e89e'; }
-			footer > button[data-action="options"]:before   { content: '\e8b8'; }
+			stealthify-footer > button[data-action="incognito"]:before { content: '\e89e'; }
+			stealthify-footer > button[data-action="options"]:before   { content: '\e8b8'; }
 
 		</style>
 	</head>
 	<body data-page="popup">
-		<main>
-			<section data-key="modes">
-				TODO: Toggle Cards for domain and subdomains
-			</section>
-			<section data-key="toggles-cdn">
-				TODO: Toggle Cards for included CDNs
-			</section>
-			<section data-key="toggles-service">
-				TODO: Toggle Cards for included third-party SDKs/Services
-			</section>
-		</main>
-		<footer>
+		<stealthify-appbar>
+			<section data-key="1st-party"></section>
+			<section data-key="2nd-party"></section>
+			<section data-key="3rd-party"></section>
+		</stealthify-appbar>
+		<stealthify-footer>
 			<button data-action="options" title="Open Stealthify Options"></button>
 			<button data-action="incognito" title="Open Website in Incognito Window"></button>
-		</footer>
+		</stealthify-footer>
 		<script type="module" src="popup.mjs"></script>
 	</body>
 </html>

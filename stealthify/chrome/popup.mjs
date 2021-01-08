@@ -1,11 +1,18 @@
 
 import { Element } from '../design/Element.mjs';
-// import { Toggle  } from '../design/Toggle.mjs';
+import { Mode    } from '../design/appbar/Mode.mjs';
 import { URL     } from '../source/parser/URL.mjs';
 
 
 
+window.APPBAR     = chrome.extension.getBackgroundPage().APPBAR     || {};
 window.STEALTHIFY = chrome.extension.getBackgroundPage().STEALTHIFY || null;
+
+
+
+window.APPBAR['1st-party'] = Element.query('stealthify-appbar section[data-key="1st-party"]');
+window.APPBAR['2nd-party'] = Element.query('stealthify-appbar section[data-key="2nd-party"]');
+window.APPBAR['3rd-party'] = Element.query('stealthify-appbar section[data-key="3rd-party"]');
 
 
 
@@ -76,6 +83,20 @@ if (stealthify !== null) {
 		});
 
 	}
+
+
+	let mode = Mode.from({
+		domain: 'tholian.network',
+		mode: {
+			text:  false,
+			image: true,
+			audio: false,
+			video: false,
+			other: false
+		}
+	});
+
+	mode.render(window.APPBAR['1st-party']);
 
 }
 

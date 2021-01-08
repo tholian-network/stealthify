@@ -124,11 +124,10 @@ const Stealthify = function(settings, chrome) {
 
 
 	this.settings = Object.assign({
-		debug:  false,
-		host:   'localhost',
-		theme:  'dark',
-		modes:  [],
-		powers: []
+		debug: false,
+		host:  'localhost',
+		theme: 'dark',
+		modes: []
 	}, settings);
 
 	this.client      = new Client({ host: this.settings.host }, this);
@@ -207,8 +206,7 @@ Stealthify.from = function(json) {
 			let stealthify = new Stealthify({
 				debug:  isBoolean(data.debug) ? data.debug  : null,
 				host:   isString(data.host)   ? data.host   : null,
-				modes:  isArray(data.modes)   ? data.modes  : null,
-				powers: isArray(data.powers)  ? data.powers : null
+				modes:  isArray(data.modes)   ? data.modes  : null
 			});
 
 			return stealthify;
@@ -470,23 +468,6 @@ Stealthify.prototype = Object.assign({}, Emitter.prototype, {
 
 		}
 
-
-		return false;
-
-	},
-
-	getPower: function(link) {
-
-		// TODO: Implement getPower()
-
-		return null;
-
-	},
-
-	setPower: function(power) {
-
-		// TODO: Implement setPower()
-		// TODO: this.storage.save()
 
 		return false;
 

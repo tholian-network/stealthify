@@ -90,10 +90,6 @@ Storage.prototype = {
 						this.settings.modes = data.modes;
 					}
 
-					if (isArray(data.powers) === true) {
-						this.settings.powers = data.powers;
-					}
-
 				}
 
 				callback(true);
