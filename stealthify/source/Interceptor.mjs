@@ -1,7 +1,7 @@
 
-import { Emitter, isObject } from '../extern/base.mjs';
-import { isStealthify      } from '../source/Stealthify.mjs';
-import { URL               } from '../source/parser/URL.mjs';
+import { Emitter, isNumber, isObject } from '../extern/base.mjs';
+import { isStealthify                } from '../source/Stealthify.mjs';
+import { URL                         } from '../source/parser/URL.mjs';
 
 
 
@@ -64,8 +64,11 @@ const Interceptor = function(settings, stealthify, chrome) {
 
 	this.__state.listeners['request'] = (details) => {
 
-		// TODO: Integrate details.tabId to stealthify.tabs[] and push mode{} to its list of domains
-		// console.log(details);
+		let tab = null;
+
+		if (isNumber(details.tabId) === true) {
+			tab = this.stealthify.getTab('chrome-' + details.tabId);
+		}
 
 
 		let host = this.stealthify.settings.host;
@@ -75,7 +78,7 @@ const Interceptor = function(settings, stealthify, chrome) {
 
 		if (isProxied(host, url) === false) {
 
-			let allowed = mode[mime.type] === true;
+			let allowed = mode.mode[mime.type] === true;
 
 			if (mime.format === 'application/javascript') {
 				allowed = false;
@@ -88,6 +91,20 @@ const Interceptor = function(settings, stealthify, chrome) {
 				};
 
 			} else {
+
+				let type = details.type || null;
+				if (type === 'main_frame') {
+
+					let check = tab.modes.find((m) => m.domain === mode.domain) || null;
+					if (check === null) {
+						tab.modes.push(mode);
+					}
+
+				} else {
+
+					console.info('Blocked "' + mime.type + '" for URL "' + URL.render(url) + '".');
+
+				}
 
 				return {
 					cancel: true

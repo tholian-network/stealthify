@@ -3,8 +3,11 @@ import { console, Emitter, isArray, isBoolean, isObject, isString } from '../ext
 import { Client                                                   } from '../source/Client.mjs';
 import { Interceptor                                              } from '../source/Interceptor.mjs';
 import { Storage                                                  } from '../source/Storage.mjs';
+import { Tab                                                      } from '../source/Tab.mjs';
 import { URL                                                      } from '../source/parser/URL.mjs';
 
+
+export { console } from '../extern/base.mjs';
 
 export const isStealthify = function(obj) {
 	return Object.prototype.toString.call(obj) === '[object Stealthify]';
@@ -94,18 +97,16 @@ const on_mode_change = function(mode) {
 
 		let changed = false;
 
-		tab.history.forEach((entry) => {
+		let other = tab.modes.find((m) => m.domain === mode.domain) || null;
+		if (other !== null) {
 
-			if (entry.mode.domain === mode.domain) {
-				entry.mode = mode;
-				changed    = true;
+			if (other !== mode) {
+				tab.modes.remove(other);
+				tab.modes.push(mode);
 			}
 
-		});
+			changed = true;
 
-		if (tab.mode.domain === mode.domain) {
-			tab.mode = mode;
-			changed  = true;
 		}
 
 		if (changed === true && this.tab === tab) {
@@ -470,6 +471,33 @@ Stealthify.prototype = Object.assign({}, Emitter.prototype, {
 
 
 		return false;
+
+	},
+
+	getTab: function(id) {
+
+		id = isString(id) ? id : null;
+
+
+		if (id !== null) {
+
+			let tab = this.tabs.find((t) => t.id === id) || null;
+			if (tab === null) {
+
+				tab = new Tab({
+					id: id
+				});
+
+				this.tabs.push(tab);
+
+			}
+
+			return tab;
+
+		}
+
+
+		return null;
 
 	}
 
