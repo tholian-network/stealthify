@@ -185,8 +185,6 @@ const Stealthify = function(settings, chrome) {
 		chrome.browserAction.setBadgeText({ text: '' });
 		chrome.browserAction.setTitle({ title: 'Stealthify: disconnected' });
 
-		this.reconnect();
-
 	});
 
 };

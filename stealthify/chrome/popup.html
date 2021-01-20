@@ -44,12 +44,18 @@
 				padding: 0px;
 				font-family: 'museo';
 				font-size: 16px;
+				line-height: 32px;
 				text-align: right;
+				white-space: nowrap;
 				box-sizing: border-box;
+				vertical-align: middle;
 			}
 
-			stealthify-footer > button[data-action="incognito"]:before { content: '\e89e'; }
-			stealthify-footer > button[data-action="options"]:before   { content: '\e8b8'; }
+			stealthify-footer > button[data-action="connect"]:before    { content: '\e836'; }
+			stealthify-footer > button[data-action="disconnect"]:before { content: '\e837'; }
+			stealthify-footer > button[data-action="disconnect"]:before { color: var(--element-inactive-color); }
+			stealthify-footer > button[data-action="incognito"]:before  { content: '\e89e'; }
+			stealthify-footer > button[data-action="options"]:before    { content: '\e8b8'; }
 
 		</style>
 	</head>
@@ -60,6 +66,7 @@
 			<section data-key="3rd-party"></section>
 		</stealthify-appbar>
 		<stealthify-footer>
+			<button data-action="disconnect" title="Disconnect Stealthify"></button>
 			<button data-action="options" title="Open Stealthify Options"></button>
 			<button data-action="incognito" title="Open Website in Incognito Window"></button>
 		</stealthify-footer>

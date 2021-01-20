@@ -50,6 +50,31 @@ const update = function(tab) {
 
 };
 
+const getURL = (callback) => {
+
+	chrome.tabs.query({
+		active:        true,
+		currentWindow: true
+	}, (tabs) => {
+
+		let tab = tabs[0] || null;
+		if (tab !== null) {
+
+			let url = URL.parse(tab.url);
+			if (URL.isURL(url) === true) {
+				callback(url);
+			} else {
+				callback(null);
+			}
+
+		} else {
+			callback(null);
+		}
+
+	});
+
+};
+
 
 
 let stealthify = window.STEALTHIFY || null;
@@ -60,21 +85,47 @@ if (stealthify !== null) {
 		body.attr('data-theme', stealthify.settings.theme);
 	}
 
+	let disconnect = Element.query('button[data-action="disconnect"]');
+	if (disconnect !== null) {
+
+		disconnect.on('click', () => {
+
+			let action = disconnect.attr('data-action');
+			if (action === 'connect') {
+				stealthify.connect();
+			} else if (action === 'disconnect') {
+				stealthify.disconnect();
+			}
+
+		});
+
+		if (stealthify.is('connected') === false) {
+			disconnect.attr('data-action', 'connect');
+			disconnect.attr('title', 'Connect Stealthify');
+		}
+
+		stealthify.on('connect', () => {
+			disconnect.attr('data-action', 'disconnect');
+			disconnect.attr('title', 'Disconnect Stealthify');
+		});
+
+		stealthify.on('disconnect', () => {
+			disconnect.attr('data-action', 'connect');
+			disconnect.attr('title', 'Connect Stealthify');
+		});
+
+	}
+
 	let incognito = Element.query('button[data-action="incognito"]');
 	if (incognito !== null) {
 
 		incognito.on('click', () => {
 
-			chrome.tabs.query({
-				active:        true,
-				currentWindow: true
-			}, (tabs) => {
+			if (incognito.state() !== 'disabled') {
 
-				let tab = tabs[0] || null;
-				if (tab !== null) {
+				getURL((url) => {
 
-					let url = URL.parse(tab.url);
-					if (URL.isURL(url) === true) {
+					if (url !== null) {
 
 						chrome.windows.create({
 							incognito: true,
@@ -83,9 +134,17 @@ if (stealthify !== null) {
 
 					}
 
-				}
+				});
 
-			});
+			}
+
+		});
+
+		getURL((url) => {
+
+			if (url === null) {
+				incognito.state('disabled');
+			}
 
 		});
 
