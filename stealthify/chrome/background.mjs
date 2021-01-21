@@ -9,6 +9,18 @@ let stealthify = new Stealthify(null, chrome);
 
 setTimeout(() => {
 
+	chrome.proxy.settings.set({
+		value: {
+			mode: 'direct'
+		}
+	}, () => {
+		// Do Nothing
+	});
+
+}, 0);
+
+setTimeout(() => {
+
 	stealthify.storage.read((result) => {
 
 		if (result === true) {
@@ -17,7 +29,7 @@ setTimeout(() => {
 
 	});
 
-}, 0);
+}, 100);
 
 setTimeout(() => {
 
