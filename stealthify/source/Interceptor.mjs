@@ -13,6 +13,32 @@ export const isInterceptor = function(obj) {
 	return Object.prototype.toString.call(obj) === '[object Interceptor]';
 };
 
+const isFavicon = function(stealth_host, url) {
+
+	if (isObject(url) === true) {
+
+		let domain = URL.toDomain(url);
+		let host   = URL.toHost(url);
+
+		if (domain === stealth_host || host === stealth_host) {
+
+			if (url.port === 65432) {
+
+				if (url.path === '/favicon.ico' === true) {
+					return true;
+				}
+
+			}
+
+		}
+
+	}
+
+
+	return false;
+
+};
+
 const isProxied = function(stealth_host, url) {
 
 	if (isObject(url) === true) {
@@ -28,6 +54,28 @@ const isProxied = function(stealth_host, url) {
 					return true;
 				}
 
+			}
+
+		}
+
+	}
+
+
+	return false;
+
+};
+
+const isStealth = function(stealth_host, url) {
+
+	if (isObject(url) === true) {
+
+		let domain = URL.toDomain(url);
+		let host   = URL.toHost(url);
+
+		if (domain === stealth_host || host === stealth_host) {
+
+			if (url.port === 65432) {
+				return true;
 			}
 
 		}
@@ -75,6 +123,7 @@ const Interceptor = function(settings, stealthify, chrome) {
 		let host     = this.stealthify.settings.host;
 		let url      = URL.parse(details.url);
 
+
 		if (isProxied(host, url) === false) {
 
 			let mode    = this.stealthify.getMode(url.link);
@@ -89,7 +138,19 @@ const Interceptor = function(settings, stealthify, chrome) {
 
 				if (enforce === true) {
 
-					if (url.protocol === 'https') {
+					if (isFavicon(host, url) === true) {
+
+						return {
+							redirectUrl: 'http://' + host + ':65432/browser/design/common/tholian.ico'
+						};
+
+					} else if (isStealth(host, url) === true) {
+
+						return {
+							cancel: false
+						};
+
+					} else if (url.protocol === 'https') {
 
 						return {
 							redirectUrl: 'http://' + host + ':65432/stealth/' + URL.render(url)
@@ -221,31 +282,26 @@ const Interceptor = function(settings, stealthify, chrome) {
 
 	this.__state.listeners['filter-response-headers'] = (details) => {
 
-		let location_header = details.responseHeaders.find((header) => {
-			return header.name.toLowerCase() === 'location';
-		}) || null;
+		// XXX: Does the Location header need rewrites?
+		// let location_header = details.responseHeaders.find((header) => {
+		// 	return header.name.toLowerCase() === 'location';
+		// }) || null;
 
-		if (location_header !== null) {
+		// if (location_header !== null) {
 
-			let enforce  = this.stealthify.settings.enforce;
-			let host     = this.stealthify.settings.host;
-			let url      = URL.parse(location_header.value);
+		// 	let enforce  = this.stealthify.settings.enforce;
+		// 	let host     = this.stealthify.settings.host;
+		// 	let url      = URL.resolve(details.url, URL.parse(location_header.value));
 
-			console.log(url);
+		// 	if (isProxied(host, url) === false) {
 
-			if (isProxied(host, url) === false) {
+		// 		if (enforce === true) {
+		// 			filter.call(details.responseHeaders, 'location');
+		// 		}
 
-				if (enforce === true) {
+		// 	}
 
-					// TODO: Figure out when this happens (probably server response)
-					// and redirect accordingly to /stealth/<url>
-
-				}
-
-			}
-
-		}
-
+		// }
 
 		filter.call(details.responseHeaders, 'age');
 		filter.call(details.responseHeaders, 'allow');
