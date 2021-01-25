@@ -43,6 +43,18 @@ const Settings = function(stealthify, actions) {
 		'<h4>Host</h4>',
 		'<p>Stealthify can use a Stealth Service via a hostname which should be in the local network.</p>',
 		'<input name="host" type="text" value="localhost">',
+		'<h4>Enforce Optimizers</h4>',
+		'<p>Stealthify can enforce Optimizers in order to filter out malicious code in HTML and CSS files.</p>',
+		'<ul>',
+		'<li>',
+		'<input id="stealthify-card-settings-enforce-' + uid + '-1" name="enforce" type="radio" value="true">',
+		'<label for="stealthify-card-settings-enforce-' + uid + '-1">Enforce optimizers.</label>',
+		'</li>',
+		'<li>',
+		'<input id="stealthify-card-settings-enforce-' + uid + '-2" name="enforce" type="radio" value="false">',
+		'<label for="stealthify-card-settings-enforce-' + uid + '-2">Disable optimizers.</label>',
+		'</li>',
+		'</ul>',
 		'</stealthify-card-settings-article>',
 		'<stealthify-card-settings-footer>',
 		'<button title="Save" data-action="save"></button>',
@@ -55,9 +67,10 @@ const Settings = function(stealthify, actions) {
 	};
 
 	this.model = {
-		debug: this.element.query('input[name="debug"]'),
-		host:  this.element.query('input[name="host"]'),
-		theme: this.element.query('input[name="theme"]')
+		debug:   this.element.query('input[name="debug"]'),
+		enforce: this.element.query('input[name="enforce"]'),
+		host:    this.element.query('input[name="host"]'),
+		theme:   this.element.query('input[name="theme"]')
 	};
 
 	Widget.call(this);

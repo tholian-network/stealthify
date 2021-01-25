@@ -1,7 +1,7 @@
 
-import { Emitter, isNumber, isObject } from '../extern/base.mjs';
-import { isStealthify                } from '../source/Stealthify.mjs';
-import { URL                         } from '../source/parser/URL.mjs';
+import { console, Emitter, isNumber, isObject } from '../extern/base.mjs';
+import { isStealthify                         } from '../source/Stealthify.mjs';
+import { URL                                  } from '../source/parser/URL.mjs';
 
 
 
@@ -13,16 +13,23 @@ export const isInterceptor = function(obj) {
 	return Object.prototype.toString.call(obj) === '[object Interceptor]';
 };
 
-const isProxied = function(host, url) {
+const isProxied = function(stealth_host, url) {
 
 	if (isObject(url) === true) {
 
-		if (
-			url.domain === host
-			&& url.port === 65432
-			&& url.path.startsWith('/stealth/')
-		) {
-			return true;
+		let domain = URL.toDomain(url);
+		let host   = URL.toHost(url);
+
+		if (domain === stealth_host || host === stealth_host) {
+
+			if (url.port === 65432) {
+
+				if (url.path.startsWith('/stealth/') === true) {
+					return true;
+				}
+
+			}
+
 		}
 
 	}
@@ -64,20 +71,14 @@ const Interceptor = function(settings, stealthify, chrome) {
 
 	this.__state.listeners['request'] = (details) => {
 
-		let tab = null;
-
-		if (isNumber(details.tabId) === true) {
-			tab = this.stealthify.getTab('chrome-' + details.tabId);
-		}
-
-
-		let host = this.stealthify.settings.host;
-		let url  = URL.parse(details.url);
-		let mime = url.mime;
-		let mode = this.stealthify.getMode(url.link);
+		let enforce  = this.stealthify.settings.enforce;
+		let host     = this.stealthify.settings.host;
+		let url      = URL.parse(details.url);
 
 		if (isProxied(host, url) === false) {
 
+			let mode    = this.stealthify.getMode(url.link);
+			let mime    = url.mime;
 			let allowed = mode.mode[mime.type] === true;
 
 			if (mime.format === 'application/javascript') {
@@ -86,11 +87,37 @@ const Interceptor = function(settings, stealthify, chrome) {
 
 			if (allowed === true) {
 
-				return {
-					redirectUrl: 'http://' + host + ':65432/stealth/' + URL.render(url)
-				};
+				if (enforce === true) {
+
+					if (url.protocol === 'https') {
+
+						return {
+							redirectUrl: 'http://' + host + ':65432/stealth/' + URL.render(url)
+						};
+
+					} else if (url.protocol === 'http') {
+
+						return {
+							redirectUrl: 'http://' + host + ':65432/stealth/' + URL.render(url)
+						};
+
+					} else {
+
+						return {
+							cancel: true
+						};
+
+					}
+
+				}
 
 			} else {
+
+				let tab = null;
+
+				if (isNumber(details.tabId) === true) {
+					tab = this.stealthify.getTab('chrome-' + details.tabId);
+				}
 
 				let type = details.type || null;
 				if (type === 'main_frame') {
@@ -106,27 +133,13 @@ const Interceptor = function(settings, stealthify, chrome) {
 
 				}
 
-				return {
-					cancel: true
-				};
-
-			}
-
-		} else {
-
-			let allowed = true;
-
-			if (mime.format === 'application/javascript') {
-				allowed = false;
-			}
-
-			if (allowed === false) {
 
 				return {
 					cancel: true
 				};
 
 			}
+
 
 		}
 
@@ -208,6 +221,32 @@ const Interceptor = function(settings, stealthify, chrome) {
 
 	this.__state.listeners['filter-response-headers'] = (details) => {
 
+		let location_header = details.responseHeaders.find((header) => {
+			return header.name.toLowerCase() === 'location';
+		}) || null;
+
+		if (location_header !== null) {
+
+			let enforce  = this.stealthify.settings.enforce;
+			let host     = this.stealthify.settings.host;
+			let url      = URL.parse(location_header.value);
+
+			console.log(url);
+
+			if (isProxied(host, url) === false) {
+
+				if (enforce === true) {
+
+					// TODO: Figure out when this happens (probably server response)
+					// and redirect accordingly to /stealth/<url>
+
+				}
+
+			}
+
+		}
+
+
 		filter.call(details.responseHeaders, 'age');
 		filter.call(details.responseHeaders, 'allow');
 		filter.call(details.responseHeaders, 'alt-svc');
@@ -245,10 +284,6 @@ const Interceptor = function(settings, stealthify, chrome) {
 		filter.call(details.responseHeaders, 'x-ua-compatible');
 		filter.call(details.responseHeaders, 'x-webkit-csp');
 		filter.call(details.responseHeaders, 'x-xss-protection');
-
-
-		// TODO: location?
-		filter.call(details.responseHeaders, 'location');
 
 
 		details.responseHeaders.push({
@@ -325,6 +360,33 @@ Interceptor.prototype = Object.assign({}, Emitter.prototype, {
 				this.chrome.webRequest.onBeforeSendHeaders.addListener(this.__state.listeners['filter-request-headers'], FILTER, [ 'blocking', 'requestHeaders', 'extraHeaders' ]);
 				this.chrome.webRequest.onHeadersReceived.addListener(this.__state.listeners['filter-response-headers'], FILTER, [ 'blocking', 'responseHeaders', 'extraHeaders' ]);
 
+				this.chrome.proxy.settings.set({
+					value: {
+						mode: 'fixed_servers',
+						rules: {
+							bypassList: (this.stealthify.settings.host !== 'localhost' ? [ 'localhost', this.stealthify.settings.host ] : [ 'localhost' ]),
+							proxyForFtp: {
+								scheme: 'socks5',
+								host: this.stealthify.settings.host,
+								port: 65432
+							},
+							proxyForHttp: {
+								scheme: 'http',
+								host: this.stealthify.settings.host,
+								port: 65432
+							},
+							proxyForHttps: {
+								scheme: 'http',
+								host: this.stealthify.settings.host,
+								port: 65432
+							}
+						}
+					},
+					scope: 'regular'
+				}, () => {
+					// Do Nothing
+				});
+
 				this.__state.connected = true;
 
 				return true;
@@ -345,6 +407,14 @@ Interceptor.prototype = Object.assign({}, Emitter.prototype, {
 			this.chrome.webRequest.onBeforeRequest.removeListener(this.__state.listeners['request']);
 			this.chrome.webRequest.onBeforeSendHeaders.removeListener(this.__state.listeners['filter-request-headers']);
 			this.chrome.webRequest.onHeadersReceived.removeListener(this.__state.listeners['filter-response-headers']);
+
+			this.chrome.proxy.settings.set({
+				value: {
+					mode: 'direct'
+				}
+			}, () => {
+				// Do Nothing
+			});
 
 			this.__state.connected = false;
 

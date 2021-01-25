@@ -133,10 +133,12 @@ stealthify-card-settings-article > ul li label a {
 	vertical-align: top;
 }
 
-stealthify-card-settings-article > ul li input[type="radio"][name="theme"][value="dark"]:before  { content: '\e1ad'; }
-stealthify-card-settings-article > ul li input[type="radio"][name="theme"][value="light"]:before { content: '\e1ac'; }
-stealthify-card-settings-article > ul li input[type="radio"][name="debug"][value="false"]:before { content: '\e612'; }
-stealthify-card-settings-article > ul li input[type="radio"][name="debug"][value="true"]:before  { content: '\e868'; }
+stealthify-card-settings-article > ul li input[type="radio"][name="theme"][value="dark"]:before    { content: '\e1ad'; }
+stealthify-card-settings-article > ul li input[type="radio"][name="theme"][value="light"]:before   { content: '\e1ac'; }
+stealthify-card-settings-article > ul li input[type="radio"][name="debug"][value="false"]:before   { content: '\e612'; }
+stealthify-card-settings-article > ul li input[type="radio"][name="debug"][value="true"]:before    { content: '\e868'; }
+stealthify-card-settings-article > ul li input[type="radio"][name="enforce"][value="false"]:before { content: '\e002'; }
+stealthify-card-settings-article > ul li input[type="radio"][name="enforce"][value="true"]:before  { content: '\e32a'; }
 
 stealthify-card-settings-article > ul li input[type="radio"]:focus + label,
 stealthify-card-settings-article > ul li input[type="radio"]:hover + label {

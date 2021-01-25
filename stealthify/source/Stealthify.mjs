@@ -125,10 +125,11 @@ const Stealthify = function(settings, chrome) {
 
 
 	this.settings = Object.assign({
-		debug: false,
-		host:  'localhost',
-		theme: 'dark',
-		modes: []
+		debug:   false,
+		enforce: true,
+		host:    'localhost',
+		theme:   'dark',
+		modes:   []
 	}, settings);
 
 	this.client      = new Client({ host: this.settings.host }, this);
@@ -184,6 +185,8 @@ const Stealthify = function(settings, chrome) {
 
 		chrome.browserAction.setBadgeText({ text: '' });
 		chrome.browserAction.setTitle({ title: 'Stealthify: disconnected' });
+
+		this.interceptor.disconnect();
 
 	});
 
