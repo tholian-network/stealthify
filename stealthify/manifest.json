@@ -17,6 +17,19 @@
 		"default_popup": "chrome/popup.html",
 		"default_icon": "design/icon-48.png"
 	},
+	"content_scripts": [
+		{
+			"matches":    [ "http://*/*", "https://*/*" ],
+			"all_frames": true,
+			"run_at":     "document_start",
+			"js":         [ "content/block.mjs" ]
+		}, {
+			"matches":    [ "http://*/*", "https://*/*" ],
+			"all_frames": true,
+			"run_at":     "document_end",
+			"js":         [ "content/clean.mjs" ]
+		}
+	],
 	"permissions": [
 		"cookies",
 		"proxy",
