@@ -81,3 +81,28 @@ EVENTS.forEach((event) => {
 
 });
 
+
+Array.from(document.querySelectorAll('a[href]')).forEach((link) => {
+
+	let href = link.getAttribute('href');
+	if (
+		href.startsWith('javascript:')
+		|| href === '#'
+	) {
+		link.setAttribute('href', null);
+		link.removeAttribute('href');
+		link.parentNode.removeChild(link);
+	}
+
+});
+
+
+Array.from(document.querySelectorAll('form[action]')).forEach((form) => {
+
+	let action = form.getAttribute('action');
+	if (action === '#' || action === '') {
+		form.parentNode.removeChild(form);
+	}
+
+});
+
