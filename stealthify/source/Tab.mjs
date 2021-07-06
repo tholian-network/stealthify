@@ -54,7 +54,7 @@ Tab.from = function(json) {
 				tab.id = data.id;
 			}
 
-			if (isString(data.url) === true) {
+			if (URL.isURL(data.url) === true) {
 				tab.url = data.url;
 			}
 

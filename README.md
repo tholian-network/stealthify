@@ -17,8 +17,8 @@ and `Site Powers` for all the resources on the currently displayed Tab.
   (or media types). By default, Stealth will load nothing. The Site Mode decides
   what is being loaded.
 
-- It uses `Site Powers` that decide whether or not a Site is allowed to use
-  `Cookies` and allowed to execute `JavaScript`.
+- It uses `Site Blueprints` that can automatically scrape URLs and forward those
+  to the connected Stealth Proxy to download accordingly into the Profile folder.
 
 - It offers an `Open in Incognito Tab` button that allows to open the currently
   displayed Site in an isolated Sandbox.

@@ -5,6 +5,10 @@ import { URL                                  } from '../source/parser/URL.mjs';
 
 
 
+const BYPASS = {
+	'mannheimer-morgen.de': 'Googlebot/2.1 (+http://www.google.com/bot.html)'
+};
+
 const FILTER = {
 	urls: [ 'https://*/*', 'http://*/*' ]
 };
@@ -226,8 +230,8 @@ const Interceptor = function(settings, stealthify, chrome) {
 		filter.call(details.requestHeaders, 'pragma');
 		filter.call(details.requestHeaders, 'proxy-authorization');
 		filter.call(details.requestHeaders, 'referer');
-		filter.call(details.requestHeaders, 'user-agent');
 		filter.call(details.requestHeaders, 'upgrade');
+		filter.call(details.requestHeaders, 'user-agent');
 		filter.call(details.requestHeaders, 'via');
 		filter.call(details.requestHeaders, 'warning');
 
@@ -270,6 +274,18 @@ const Interceptor = function(settings, stealthify, chrome) {
 				}
 
 			}
+
+		}
+
+
+		let url    = URL.parse(details.url);
+		let bypass = BYPASS[url.domain] || null;
+		if (bypass !== null) {
+
+			details.requestHeaders.push({
+				name:  'user-agent',
+				value: bypass
+			});
 
 		}
 
@@ -382,7 +398,7 @@ Interceptor.from = function(json) {
 		let data = isObject(json.data)         ? json.data : null;
 
 		if (type !== null && data !== null) {
-			return new Storage(data);
+			return new Interceptor(data);
 		}
 
 	}

@@ -96,13 +96,3 @@ Array.from(document.querySelectorAll('a[href]')).forEach((link) => {
 
 });
 
-
-Array.from(document.querySelectorAll('form[action]')).forEach((form) => {
-
-	let action = form.getAttribute('action');
-	if (action === '#' || action === '') {
-		form.parentNode.removeChild(form);
-	}
-
-});
-
